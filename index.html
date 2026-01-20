@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es" class="light dark">
   <head>
     <meta charset="UTF-8" />
@@ -24,28 +24,25 @@
   </head>
 
   <body
-    onload="sucursalConsultaNoEliminados()
-  .then(sucursales => {
-   renderiza(lista, sucursales)
-   sincroniza(lista)
-  })
-  .catch(error => {
-   muestraError(error)
-   esperaUnPocoYSincroniza(lista)
-  })"
+    onload="
+      sucursalConsultaNoEliminados()
+        .then((sucursales) => {
+          renderiza(lista, sucursales);
+          sincroniza(lista);
+        })
+        .catch((error) => {
+          muestraError(error);
+          esperaUnPocoYSincroniza(lista);
+        })
+    "
   >
     <md-top-app-bar adicional="tab" style="text-align: center">
-      <h1>GYMan - PWA GYMan</h1>
     </md-top-app-bar>
 
-    <nav-tab-fixed id="tab"></nav-tab-fixed>
-
     <main>
-      <ul class="md-list" id="lista">
-        <li class="md-two-line">
-          <progress max="100">Cargando…</progress>
-        </li>
-      </ul>
+      <div class="md-cards" id="lista">
+        <progress max="100">Cargando…</progress>
+      </div>
 
       <a
         type="button"

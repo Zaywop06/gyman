@@ -17,15 +17,13 @@ export function renderiza(lista, sucursales) {
     const params = htmlentities(searchParams.toString());
     render +=
       /* html */
-      `<li class="md-two-line">
-        <p>
-          <a href="modifica.html?${params}" style="text-decoration: none;">
-            <span class="headline">${nombre}</span>
-            <span class="supporting">Ubicación: ${ubicacion}</span>
-            <span class="supporting">Estado: ${estado}</span>
-          </a>
-        </p>
-      </li>`;
+      `<a href="modifica.html?${params}" style="text-decoration: none;">
+        <figure>
+          <img alt="GYMan ${nombre}" src="https://lh3.googleusercontent.com/pw/AP1GczO5jLBuXwYKvRtgxS9NJJHor2Pu3QT8hpCOU1DmmVm97alMKWNrx9qXJNTpFR6Rnr_P8miOS-Zh1C3xuJQv916i_I2aPUshY2gIx9JgI12walQq8h2frUjIT68HWgCLXtL5mzhe1JGKNBGl18uKzrw=w783-h978-s-no-gm?authuser=0" />
+        </figure>
+        <span class="headline" style="text-decoration: none;">${nombre}</span>
+        <span class="supporting">${ubicacion}</span>
+      </a>`;
   }
   lista.innerHTML = render;
 }
