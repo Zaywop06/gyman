@@ -12,6 +12,9 @@ export function validaSucursal(objeto) {
   if (typeof objeto.SUC_UBICACION !== "string")
     throw new Error("La ubicación debe ser texto.");
 
+  if (typeof objeto.SUC_IMAGEN !== "string")
+    throw new Error("La imagen debe ser texto.");
+
   if (typeof objeto.SUC_ESTADO !== "string")
     throw new Error("El estado debe ser texto.");
 

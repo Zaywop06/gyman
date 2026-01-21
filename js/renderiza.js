@@ -12,20 +12,18 @@ export function renderiza(lista, sucursales) {
       throw new Error(`Falta SUC_ID de ${modelo.SUC_NOMBRE}.`);
     const nombre = htmlentities(modelo.SUC_NOMBRE);
     const ubicacion = htmlentities(modelo.SUC_UBICACION);
-    const estado = htmlentities(modelo.SUC_ESTADO);
+    const imagen = htmlentities(modelo.SUC_IMAGEN);
     const searchParams = new URLSearchParams([["id", modelo.SUC_ID]]);
     const params = htmlentities(searchParams.toString());
     render +=
       /* html */
-      `<li class="md-two-line">
-        <p>
-          <a href="modifica.html?${params}" style="text-decoration: none;">
-            <span class="headline">${nombre}</span>
-            <span class="supporting">Ubicación: ${ubicacion}</span>
-            <span class="supporting">Estado: ${estado}</span>
-          </a>
-        </p>
-      </li>`;
+      `<a href="modifica.html?${params}" style="text-decoration: none;">
+        <figure>
+          <img alt="GYMan ${nombre}" src="${imagen}" />
+        </figure>
+        <span class="headline" style="text-decoration: none;">${nombre}</span>
+        <span class="supporting">${ubicacion}</span>
+      </a>`;
   }
   lista.innerHTML = render;
 }

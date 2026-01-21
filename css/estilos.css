@@ -16,8 +16,10 @@
 @import url(../lib/css/md-standard-icon-button.css);
 @import url(../lib/css/md-fab-primary.css);
 @import url(../lib/css/md-filled-text-field.css);
+@import url(../lib/css/md-image-preview.css);
 @import url(../lib/css/md-segmented-button.css);
 @import url(../lib/css/md-list.css);
+@import url(../lib/css/md-cards.css);
 @import url(../lib/css/md-tab.css);
 
 html {

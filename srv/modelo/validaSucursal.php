@@ -31,6 +31,13 @@ function validaSucursal($objeto)
             type: "/error/ubicacionincorrecta.html",
         );
 
+    if (!isset($objeto->SUC_IMAGEN) || !is_string($objeto->SUC_IMAGEN))
+        throw new ProblemDetails(
+            status: BAD_REQUEST,
+            title: "La imagen debe ser texto.",
+            type: "/error/imagenincorrecta.html",
+        );
+
     if (!isset($objeto->SUC_ESTADO) || !is_string($objeto->SUC_ESTADO))
         throw new ProblemDetails(
             status: BAD_REQUEST,
@@ -56,6 +63,7 @@ function validaSucursal($objeto)
         SUC_ID => $objeto->SUC_ID,
         SUC_NOMBRE => $objeto->SUC_NOMBRE,
         SUC_UBICACION => $objeto->SUC_UBICACION,
+        SUC_IMAGEN => $objeto->SUC_IMAGEN,
         SUC_ESTADO => $objeto->SUC_ESTADO,
         SUC_MODIFICACION => $objeto->SUC_MODIFICACION,
         SUC_ELIMINADA => $objeto->SUC_ELIMINADA
