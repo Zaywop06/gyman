@@ -27,8 +27,9 @@
     // Lee el nombre, quitándole los espacios al inicio y al final.
     const SUC_NOMBRE = forma.nombre.value.trim()
     const SUC_UBICACION = forma.ubicacion.value.trim()
+    const SUC_IMAGEN = ultimaDataUrl
     const SUC_ESTADO = forma.estado.value.trim()
-    const modelo = { SUC_NOMBRE, SUC_UBICACION, SUC_ESTADO }
+    const modelo = { SUC_NOMBRE, SUC_UBICACION, SUC_IMAGEN, SUC_ESTADO }
     sucursalAgrega(modelo)
      .then(json => location.href = 'index.html')
      .catch(muestraError)">
@@ -70,7 +71,7 @@
 
       <p>
         <label class="md-filled-text-field">
-          <input id="imagen" name="imagen" type="file" accept="image/*" capture="camera" />
+          <input id="imagen" name="imagen" type="file" accept="image/*" />
           <span>Imagen *</span>
           <small>Obligatorio</small>
         </label>
@@ -115,6 +116,17 @@
 
     imgPreview.src = URL.createObjectURL(file);
     previewSection.hidden = false;
+  });
+
+  let ultimaDataUrl = null;
+  inputImagen.addEventListener("change", async (evt) => {
+    const file = evt.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      ultimaDataUrl = reader.result;
+    };
+    reader.readAsDataURL(file);
   });
 </script>
 

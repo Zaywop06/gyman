@@ -15,7 +15,7 @@
  * conoce como número menor y se cambia cuando se realizan
  * modificaciones menores.
  */
-const VERSION = "2.00";
+const VERSION = "3.00";
 
 /**
  * Nombre de la carpeta de caché.
@@ -41,24 +41,27 @@ const ARCHIVOS = [
   "css/light-mc.css",
   "css/light.css",
   "css/transicion_pestanas.css",
-  "error/sucursalnoencontrada.html",
   "error/datosnojson.html",
-  "error/ubicacionenblanco.html",
-  "error/ubicacionincorrecta.html",
   "error/eliminadoincorrecto.html",
   "error/errorinterno.html",
   "error/estadoenblanco.html",
   "error/estadoincorrecto.html",
-  "error/faltaubicacion.html",
   "error/faltaestado.html",
   "error/faltaid.html",
+  "error/faltaimagen.html",
   "error/faltanombre.html",
+  "error/faltaubicacion.html",
   "error/idenblanco.html",
   "error/idincorrecto.html",
+  "error/imagenenblanco.html",
+  "error/imagenincorrecta.html",
   "error/modificacionincorrecta.html",
   "error/nombreenblanco.html",
   "error/nombreincorrecto.html",
   "error/resultadonojson.html",
+  "error/sucursalnoencontrada.html",
+  "error/ubicacionenblanco.html",
+  "error/ubicacionincorrecta.html",
   "img/icono2048.png",
   "img/maskable_icon.png",
   "img/maskable_icon_x128.png",
@@ -88,15 +91,16 @@ const ARCHIVOS = [
   "js/bd/sucursalConsultaNoEliminados.js",
   "js/bd/sucursalConsultaTodos.js",
   "js/bd/sucursalElimina.js",
-  "js/bd/sucursalModifica.js",
   "js/bd/sucursalesReemplaza.js",
+  "js/bd/sucursalModifica.js",
   "js/modelo/SUCURSAL.js",
+  "js/modelo/validaEstado.js",
+  "js/modelo/validaId.js",
+  "js/modelo/validaImagen.js",
+  "js/modelo/validaNombre.js",
   "js/modelo/validaSucursal.js",
   "js/modelo/validaSucursales.js",
   "js/modelo/validaUbicacion.js",
-  "js/modelo/validaEstado.js",
-  "js/modelo/validaId.js",
-  "js/modelo/validaNombre.js",
   "lib/css/material-symbols-outlined.css",
   "lib/css/md-cards.css",
   "lib/css/md-fab-primary.css",
@@ -165,7 +169,7 @@ if (self instanceof ServiceWorkerGlobalScope) {
 
   // Evento cuando el service worker se vuelve activo.
   self.addEventListener("activate", () =>
-    console.log("El service worker está activo.")
+    console.log("El service worker está activo."),
   );
 }
 
@@ -189,6 +193,26 @@ async function buscaLaRespuestaEnElCache(evt) {
   // Abre el caché.
   const cache = await caches.open(CACHE);
   const request = evt.request;
+  // Maneja las imágenes de sucursales de forma especial
+  if (request.url.includes("/img/sucursales/")) {
+    try {
+      // Intentar red primero
+      const response = await fetch(request)
+
+      // Guardar copia en cache si es válida
+      if (response && response.status === 200) {
+        cache.put(request, response.clone())
+      }
+
+      return response
+    } catch (error) {
+      // Si no hay red, buscar en cache
+      const cached = await cache.match(request)
+      if (cached) return cached
+
+      throw error
+    }
+  }
   /* Busca la respuesta a la solicitud en el contenido del caché, sin
    * tomar en cuenta la parte después del símbolo "?" en la URL. */
   const response = await cache.match(request, { ignoreSearch: true });

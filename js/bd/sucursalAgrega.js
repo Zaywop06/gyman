@@ -3,6 +3,7 @@ import { creaIdCliente } from "../../lib/js/creaIdCliente.js";
 import { ALMACEN_SUCURSAL, Bd } from "./Bd.js";
 import { validaNombre } from "../modelo/validaNombre.js";
 import { validaUbicacion } from "../modelo/validaUbicacion.js";
+import { validaImagen } from "../modelo/validaImagen.js";
 import { validaEstado } from "../modelo/validaEstado.js";
 import { exportaAHtml } from "../../lib/js/exportaAHtml.js";
 
@@ -12,6 +13,7 @@ import { exportaAHtml } from "../../lib/js/exportaAHtml.js";
 export async function sucursalAgrega(modelo) {
   validaNombre(modelo.SUC_NOMBRE);
   validaUbicacion(modelo.SUC_UBICACION);
+  validaImagen(modelo.SUC_IMAGEN);
   validaEstado(modelo.SUC_ESTADO);
   modelo.SUC_MODIFICACION = Date.now();
   modelo.SUC_ELIMINADA = 0;
