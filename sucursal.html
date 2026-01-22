@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es" class="light dark">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Modificar Sucursal - PWA GYMan</title>
+
+    <script src="js/registraServiceWorker.js"></script>
+
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#4caf50" />
+    <link rel="icon" sizes="32x32" href="favicon.ico" />
+    <link rel="manifest" href="site.webmanifest" />
+    <script src="ungap/custom-elements.js"></script>
+
+    <script type="module" src="js/configura.js"></script>
+    <link rel="stylesheet" href="css/estilos.css" />
+
+    <script type="module" src="lib/js/muestraError.js"></script>
+    <script type="module" src="lib/js/muestraObjeto.js"></script>
+    <script type="module" src="js/bd/sucursalBusca.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+      defer
+    ></script>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        cerrarModal();
+      });
+
+      // Obtiene los parámetros de la página.
+      const parametros = new URL(location.href).searchParams;
+
+      const paramId = parametros.get("id");
+    </script>
+  </head>
+
+  <body
+    onload="
+      if (paramId !== null) {
+        sucursalBusca(paramId)
+          .then((sucursal) => {
+            if (sucursal === undefined)
+              throw new Error('Sucursal no encontrada.');
+            document.getElementById('nombre').textContent =
+              `GYMAN ${sucursal.SUC_NOMBRE}`;
+            document.getElementById('ubicacion').href = sucursal.SUC_UBICACION;
+
+            const carpetaSucursal = normalizaNombre(
+              `GYMAN ${sucursal.SUC_NOMBRE}`,
+            );
+
+            const basePath = `img/sucursales/${carpetaSucursal}/`;
+
+            document.getElementById('btnMembresias').onclick = () =>
+              abrirModal(`${basePath}2.png`);
+
+            document.getElementById('btnHorarios').onclick = () =>
+              abrirModal(`${basePath}3.png`);
+
+            document.getElementById('btnServicios').onclick = () =>
+              abrirModal(`${basePath}4.png`);
+
+            let imagenes = sucursal.SUC_IMAGENES;
+
+            if (typeof imagenes === 'string') {
+              imagenes = JSON.parse(imagenes);
+            }
+
+            if (Array.isArray(imagenes) && imagenes.length > 0) {
+              const wrapper = document.getElementById('swiperWrapper');
+
+              imagenes.forEach((src) => {
+                const slide = document.createElement('div');
+                slide.className = 'swiper-slide';
+
+                const img = document.createElement('img');
+                img.src = src;
+                img.loading = 'lazy';
+                img.alt = 'Imagen de sucursal';
+
+                slide.appendChild(img);
+                wrapper.appendChild(slide);
+              });
+
+              inicializaSwiper();
+            }
+          })
+          .catch(muestraError);
+      }
+    "
+  >
+    <!-- Modal -->
+    <div id="infoModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <img id="modalImage" src="" alt="Información" />
+      </div>
+    </div>
+
+    <md-top-app-bar class="center-aligned" headline="h1Headline">
+      <h1 id="nombre"></h1>
+
+      <a
+        type="button"
+        class="md-standard-icon-button"
+        title="Cancelar"
+        slot="navigation"
+        href="index.html"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </a>
+    </md-top-app-bar>
+
+    <main class="sucursal-detalle">
+      <section class="sucursal-galeria swiper">
+        <div class="swiper-wrapper" id="swiperWrapper">
+          <!-- Slides dinámicos -->
+        </div>
+
+        <!-- Controles -->
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </section>
+
+      <section class="sucursal-acciones">
+        <h2 class="section-title">Información de la sucursal</h2>
+
+        <ul class="md-list action-list">
+          <li>
+            <a class="md-two-line icon" id="ubicacion">
+              <span class="material-symbols-outlined">location_on</span>
+              <span class="headline" style="text-decoration: none">
+                UBICACIÓN
+              </span>
+              <span class="supporting-text">Conoce precios y planes</span>
+            </a>
+          </li>
+          <li id="btnMembresias">
+            <a class="md-two-line icon">
+              <span class="material-symbols-outlined">attach_money</span>
+              <span class="headline" style="text-decoration: none">
+                MEMBRESÍAS
+              </span>
+              <span class="supporting-text">Conoce precios y planes</span>
+            </a>
+          </li>
+          <li id="btnHorarios">
+            <a class="md-two-line icon">
+              <span class="material-symbols-outlined">calendar_clock</span>
+              <span class="headline" style="text-decoration: none">
+                HORARIOS
+              </span>
+              <span class="supporting-text"
+                >Conoce horarios de apertura y cierre</span
+              >
+            </a>
+          </li>
+          <li id="btnServicios">
+            <a class="md-two-line icon">
+              <span class="material-symbols-outlined">exercise</span>
+              <span class="headline" style="text-decoration: none">
+                SERVICIOS
+              </span>
+              <span class="supporting-text">Conoce nuestros servicios</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </body>
+
+  <script>
+    function inicializaSwiper() {
+      new Swiper(".swiper", {
+        loop: true,
+        spaceBetween: 16,
+
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    }
+
+    function normalizaNombre(nombre) {
+      return nombre
+        .normalize("NFD") // elimina acentos
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9 ]/g, "") // elimina símbolos
+        .trim();
+    }
+
+    function abrirModal(src) {
+      const modal = document.getElementById("infoModal");
+      const img = document.getElementById("modalImage");
+
+      img.src = src;
+      modal.style.display = "flex";
+    }
+
+    function cerrarModal() {
+      const modal = document.getElementById("infoModal");
+      modal.style.display = "none";
+    }
+  </script>
+</html>

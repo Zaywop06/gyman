@@ -9,14 +9,22 @@ function borraImagenSucursal(?string $rutaRelativa): void
         return;
     }
 
-    // Evitar paths maliciosos
+    // Seguridad
     if (str_contains($rutaRelativa, '..')) {
         return;
     }
 
-    $rutaAbsoluta = __DIR__ . '/../../' . $rutaRelativa;
+    // Ruta base REAL del proyecto
+    $base = realpath(__DIR__ . '/../../');
+
+    if (!$base) {
+        return;
+    }
+
+    $rutaAbsoluta = $base . '/' . ltrim($rutaRelativa, '/');
 
     if (is_file($rutaAbsoluta)) {
         unlink($rutaAbsoluta);
     }
 }
+

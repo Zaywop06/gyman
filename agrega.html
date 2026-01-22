@@ -27,7 +27,8 @@
     // Lee el nombre, quitándole los espacios al inicio y al final.
     const SUC_NOMBRE = forma.nombre.value.trim()
     const SUC_UBICACION = forma.ubicacion.value.trim()
-    const SUC_IMAGEN = ultimaDataUrl
+    let SUC_IMAGEN = forma.imagen.value.trim()
+    if(SUC_IMAGEN) SUC_IMAGEN = ultimaDataUrl
     const SUC_ESTADO = forma.estado.value.trim()
     const modelo = { SUC_NOMBRE, SUC_UBICACION, SUC_IMAGEN, SUC_ESTADO }
     sucursalAgrega(modelo)

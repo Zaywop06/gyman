@@ -17,12 +17,10 @@ export function renderiza(lista, sucursales) {
     const params = htmlentities(searchParams.toString());
     render +=
       /* html */
-      `<a href="modifica.html?${params}" style="text-decoration: none;">
+      `<a href="sucursal.html?${params}" style="text-decoration: none;">
         <figure>
-          <img alt="GYMan ${nombre}" src="${imagen}" />
+          <img alt="GYMAN ${nombre}" src="${imagen}" />
         </figure>
-        <span class="headline" style="text-decoration: none;">${nombre}</span>
-        <span class="supporting">${ubicacion}</span>
       </a>`;
   }
   lista.innerHTML = render;
