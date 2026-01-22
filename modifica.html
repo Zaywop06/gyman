@@ -28,6 +28,7 @@
     const parametros = new URL(location.href).searchParams;
 
     const paramId = parametros.get("id");
+    let imagenActual = null;
   </script>
 </head>
 
@@ -39,8 +40,15 @@
       nombre: { value: sucursal.SUC_NOMBRE },
       ubicacion: { value: sucursal.SUC_UBICACION }
       })
+
+      imagenActual = sucursal.SUC_IMAGEN
+      if (imagenActual) {
+        imagenPreview.src = imagenActual
+        previewSection.hidden = false
+      }
+
       // Establecemos el valor de 'estado' en los radio buttons
-      const estado = sucursal.SUC_ESTADO; // Habilitado o Deshabilitado
+      const estado = sucursal.SUC_ESTADO;
       if (estado === 'Habilitado') {
         document.getElementById('option1').checked = true;
       } else if (estado === 'Deshabilitado') {
@@ -54,11 +62,18 @@
    event.preventDefault()
    if (paramId !== null) {
     const SUC_ID = paramId
+
+    let SUC_IMAGEN = imagenActual
+
+    // si el usuario seleccionó una nueva imagen
+    if (ultimaDataUrl) {
+      SUC_IMAGEN = ultimaDataUrl
+    }
     // Lee el nombre, quitándole los espacios al inicio y al final.
     const SUC_NOMBRE = forma.nombre.value.trim()
     const SUC_UBICACION = forma.ubicacion.value.trim()
     const SUC_ESTADO = forma.estado.value.trim()
-    const modelo = { SUC_ID, SUC_NOMBRE, SUC_UBICACION, SUC_ESTADO }
+    const modelo = { SUC_ID, SUC_NOMBRE, SUC_UBICACION, SUC_IMAGEN, SUC_ESTADO }
     sucursalModifica(modelo)
      .then(json => location.href = 'index.html')
      .catch(muestraError)
@@ -119,6 +134,20 @@
         </label>
       </p>
 
+      <p>
+        <label class="md-filled-text-field">
+          <input id="imagen" name="imagen" type="file" accept="image/*" />
+          <span>Imagen *</span>
+          <small>Obligatorio</small>
+        </label>
+      </p>
+
+      <section id="previewImagen" hidden>
+        <div class="md-image-preview">
+          <img id="imagenPreview" alt="Vista previa de la imagen" />
+        </div>
+      </section>
+
       <p class="md-segmented-button">
         <input id="option1" type="radio" name="estado" value="Habilitado" />
         <label for="option1">
@@ -134,5 +163,36 @@
     </main>
   </form>
 </body>
+
+<script>
+  const inputImagen = document.getElementById("imagen");
+  const previewSection = document.getElementById("previewImagen");
+  const imgPreview = document.getElementById("imagenPreview");
+
+  inputImagen.addEventListener("change", () => {
+    const file = inputImagen.files[0];
+    if (!file) return;
+
+    // Validación básica
+    if (!file.type.startsWith("image/")) {
+      previewSection.hidden = true;
+      return;
+    }
+
+    imgPreview.src = URL.createObjectURL(file);
+    previewSection.hidden = false;
+  });
+
+  let ultimaDataUrl = null;
+  inputImagen.addEventListener("change", async (evt) => {
+    const file = evt.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      ultimaDataUrl = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+</script>
 
 </html>
