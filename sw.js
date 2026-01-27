@@ -33,6 +33,7 @@ const ARCHIVOS = [
   "index.html",
   "modifica.html",
   "site.webmanifest",
+  "sucursal.html",
   "css/dark-hc.css",
   "css/dark-mc.css",
   "css/dark.css",
@@ -40,28 +41,25 @@ const ARCHIVOS = [
   "css/light-hc.css",
   "css/light-mc.css",
   "css/light.css",
+  "css/swiper-bundle.min.css",
   "css/transicion_pestanas.css",
-  "error/datosnojson.html",
-  "error/eliminadoincorrecto.html",
   "error/errorinterno.html",
   "error/estadoenblanco.html",
-  "error/estadoincorrecto.html",
   "error/faltaestado.html",
   "error/faltaid.html",
   "error/faltaimagen.html",
+  "error/faltaimagenes.html",
   "error/faltanombre.html",
   "error/faltaubicacion.html",
+  "error/faltaubicacionlink.html",
   "error/idenblanco.html",
-  "error/idincorrecto.html",
   "error/imagenenblanco.html",
-  "error/imagenincorrecta.html",
-  "error/modificacionincorrecta.html",
+  "error/imagenesenblanco.html",
   "error/nombreenblanco.html",
-  "error/nombreincorrecto.html",
   "error/resultadonojson.html",
   "error/sucursalnoencontrada.html",
   "error/ubicacionenblanco.html",
-  "error/ubicacionincorrecta.html",
+  "error/ubicacionlinkenblanco.html",
   "img/icono2048.png",
   "img/maskable_icon.png",
   "img/maskable_icon_x128.png",
@@ -80,64 +78,48 @@ const ARCHIVOS = [
   "img/screenshot_vertical_3.png",
   "img/screenshot_vertical_4.png",
   "js/configura.js",
-  "js/esperaUnPocoYSincroniza.js",
   "js/nav-tab-fixed.js",
   "js/registraServiceWorker.js",
-  "js/renderiza.js",
-  "js/sincroniza.js",
-  "js/bd/Bd.js",
-  "js/bd/sucursalAgrega.js",
-  "js/bd/sucursalBusca.js",
-  "js/bd/sucursalConsultaNoEliminados.js",
-  "js/bd/sucursalConsultaTodos.js",
-  "js/bd/sucursalElimina.js",
-  "js/bd/sucursalesReemplaza.js",
-  "js/bd/sucursalModifica.js",
-  "js/modelo/SUCURSAL.js",
-  "js/modelo/validaEstado.js",
-  "js/modelo/validaId.js",
-  "js/modelo/validaImagen.js",
-  "js/modelo/validaNombre.js",
-  "js/modelo/validaSucursal.js",
-  "js/modelo/validaSucursales.js",
-  "js/modelo/validaUbicacion.js",
+  "js/swiper-bundle.min.js",
   "lib/css/material-symbols-outlined.css",
-  "lib/css/md-cards.css",
   "lib/css/md-fab-primary.css",
+  "lib/css/md-filled-button.css",
   "lib/css/md-filled-text-field.css",
-  "lib/css/md-image-preview.css",
   "lib/css/md-list.css",
   "lib/css/md-menu.css",
   "lib/css/md-ripple.css",
   "lib/css/md-segmented-button.css",
+  "lib/css/md-slider-field.css",
   "lib/css/md-standard-icon-button.css",
   "lib/css/md-tab.css",
   "lib/css/md-top-app-bar.css",
   "lib/css/roboto.css",
-  "lib/fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].codepoints",
+  "lib/fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].co...",
   "lib/fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf",
   "lib/fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].woff2",
   "lib/fonts/roboto-v32-latin-regular.woff2",
   "lib/js/abreElementoHtml.js",
-  "lib/js/bdConsulta.js",
-  "lib/js/bdEjecuta.js",
-  "lib/js/cierraElementoHtml.js",
+  "lib/js/cierraElementoHtmo.js",
   "lib/js/consumeJson.js",
-  "lib/js/creaIdCliente.js",
-  "lib/js/enviaJson.js",
   "lib/js/exportaAHtml.js",
   "lib/js/getAttribute.js",
   "lib/js/htmlentities.js",
   "lib/js/muestraError.js",
   "lib/js/muestraObjeto.js",
+  "lib/js/muestraTextoDeAyuda.js",
   "lib/js/ProblemDetails.js",
   "lib/js/querySelector.js",
   "lib/js/resaltaSiEstasEn.js",
   "lib/js/submitForm.js",
   "lib/js/const/ES_APPLE.js",
+  "lib/js/custom/md-menu-button.js",
+  "lib/js/custom/md-options-menu.js",
   "lib/js/custom/md-overflow-button.js",
   "lib/js/custom/md-overflow-menu.js",
+  "lib/js/custom/md-select-menu.js",
+  "lib/js/custom/md-slider-field.js",
   "lib/js/custom/md-top-app-bar.js",
+  "lib/js/custom/MdNavigationDrawer.js",
   "material-tokens/css/baseline.css",
   "material-tokens/css/colors.css",
   "material-tokens/css/elevation.css",
@@ -197,20 +179,20 @@ async function buscaLaRespuestaEnElCache(evt) {
   if (request.url.includes("/img/sucursales/")) {
     try {
       // Intentar red primero
-      const response = await fetch(request)
+      const response = await fetch(request);
 
       // Guardar copia en cache si es válida
       if (response && response.status === 200) {
-        cache.put(request, response.clone())
+        cache.put(request, response.clone());
       }
 
-      return response
+      return response;
     } catch (error) {
       // Si no hay red, buscar en cache
-      const cached = await cache.match(request)
-      if (cached) return cached
+      const cached = await cache.match(request);
+      if (cached) return cached;
 
-      throw error
+      throw error;
     }
   }
   /* Busca la respuesta a la solicitud en el contenido del caché, sin
