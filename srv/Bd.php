@@ -10,7 +10,7 @@ class Bd
 
       self::$pdo = new PDO(
         // cadena de conexión
-        "mysql:host=localhost;dbname=pwa",
+        "mysql:host=localhost;dbname=gyman",
         // usuario
         "root",
         // contraseña

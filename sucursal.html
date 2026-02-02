@@ -2,7 +2,7 @@
 <html lang="es" class="light dark">
   <head>
     <meta charset="UTF-8" />
-    <title>Modificar Sucursal - PWA DataCat</title>
+    <title>GYMAN</title>
 
     <script src="js/registraServiceWorker.js"></script>
 
@@ -10,9 +10,7 @@
     <meta name="theme-color" content="#4caf50" />
     <link rel="icon" sizes="32x32" href="favicon.ico" />
     <link rel="manifest" href="site.webmanifest" />
-    <script src="ungap/custom-elements.js"></script>
 
-    <script type="module" src="js/configura.js"></script>
     <link rel="stylesheet" href="css/estilos.css" />
 
     <script type="module" src="lib/js/consumeJson.js"></script>
@@ -23,7 +21,19 @@
     <link rel="stylesheet" href="css/swiper-bundle.min.css" />
     <script src="js/swiper-bundle.min.js"></script>
 
+    <!-- AOS -->
+    <link rel="stylesheet" href="css/aos.css" />
+    <script src="js/aos.js"></script>
+
     <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        AOS.init({
+          once: true,
+          duration: 800,
+          easing: "ease-out-cubic",
+        });
+      });
+
       // Obtiene los parámetros de la página.
       const params = new URL(location.href).searchParams;
     </script>
@@ -39,8 +49,7 @@
           })
           .catch(muestraError);
       }
-    "
-  >
+    ">
     <main>
       <form id="forma">
         <p style="display: none">
@@ -55,48 +64,41 @@
       <section id="detalle" class="detail">
         <div class="detail-header">
           <!-- GALERÍA DEL GYM -->
-          <div class="swiper">
-            <div class="swiper-wrapper" id="swiperWrapper"></div>
+          <div class="swiper" data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-delay="100">
+            <div class="swiper-wrapper" id="swiperWrapper"><progress
+                max="100">Cargando…</progress></div>
             <div class="swiper-pagination"></div>
           </div>
 
           <!-- INFO VISUAL -->
           <div class="detail-visual">
-            <h1 id="nombre"></h1>
-            <p class="meta" id="ubicacion"></p>
-
-            <div class="location-block">
-              <a
-                class="map-link"
-                id="ubicacionURL"
-                target="_blank"
-                rel="noopener"
-              >
-                <span class="material-symbols-outlined" style="font-size: 22px"
-                  >location_on</span
-                >
-                Ver ubicación en Google Maps
-              </a>
-            </div>
+            <h1 id="nombre" data-aos="fade-up"
+              data-aos-delay="150"><progress max="100">Cargando…</progress></h1>
+            <p class="meta" id="ubicacion" data-aos="fade-up"
+              data-aos-delay="250"></p>
 
             <!-- ACCESOS VISUALES -->
             <div class="info-actions">
+              <a class="info-card" id="ubicacionURL" style="text-decoration: none;">
+                <span class="material-symbols-outlined"
+                  style="font-size: 28px">location_on</span>
+                Ubicación
+              </a>
               <a class="info-card" data-modal="horarios">
-                <span class="material-symbols-outlined" style="font-size: 28px"
-                  >schedule</span
-                >
+                <span class="material-symbols-outlined"
+                  style="font-size: 28px">schedule</span>
                 Horarios
               </a>
               <a class="info-card" data-modal="membresias">
-                <span class="material-symbols-outlined" style="font-size: 28px"
-                  >credit_card</span
-                >
+                <span class="material-symbols-outlined"
+                  style="font-size: 28px">credit_card</span>
                 Membresías
               </a>
               <a class="info-card" data-modal="servicios">
-                <span class="material-symbols-outlined" style="font-size: 28px"
-                  >fitness_center</span
-                >
+                <span class="material-symbols-outlined"
+                  style="font-size: 28px">fitness_center</span>
                 Servicios
               </a>
             </div>
@@ -108,7 +110,7 @@
     <!-- MODAL DINÁMICO -->
     <div id="infoModal" class="modal">
       <div class="modal-content">
-        <img id="modalImage" src="" alt="Información" />
+        <img id="modalImage" src alt="Información" />
       </div>
     </div>
   </body>
@@ -164,6 +166,8 @@
 
         inicializaSwiper();
       }
+
+      AOS.refresh();
     }
 
     function inicializaSwiper() {

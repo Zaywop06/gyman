@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es" class="light dark">
   <head>
     <meta charset="UTF-8" />
-    <title>Acceso a base de datos - PWA DataCat</title>
+    <title>GYMAN</title>
 
     <script src="js/registraServiceWorker.js"></script>
 
@@ -10,37 +10,53 @@
     <meta name="theme-color" content="#4caf50" />
     <link rel="icon" sizes="32x32" href="favicon.ico" />
     <link rel="manifest" href="site.webmanifest" />
-    <script src="ungap/custom-elements.js"></script>
 
-    <script type="module" src="js/configura.js"></script>
     <link rel="stylesheet" href="css/estilos.css" />
 
     <script type="module" src="lib/js/consumeJson.js"></script>
     <script type="module" src="lib/js/muestraObjeto.js"></script>
     <script type="module" src="lib/js/muestraError.js"></script>
+
+    <!-- AOS -->
+    <link rel="stylesheet" href="css/aos.css" />
+    <script src="js/aos.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        AOS.init({
+          once: true,
+          duration: 800,
+          easing: "ease-out-cubic",
+        });
+      });
+    </script>
   </head>
 
   <body
-    onload="consumeJson('srv/sucursales.php')
-    .then(respuesta => muestraObjeto(document, respuesta.body))
-    .catch(muestraError)"
-  >
+    onload="
+      consumeJson('srv/sucursales.php')
+        .then((respuesta) => {
+          muestraObjeto(document, respuesta.body);
+          AOS.refresh();
+        })
+        .catch(muestraError)
+    ">
     <main>
-      <!-- HERO -->
       <header class="hero">
-        <h1>ENTRENA SIN EXCUSAS.<br />ENCUENTRA TU GYMAN.</h1>
-        <p>
-          Explora nuestras sucursales y elige el gimnasio que se adapta a tu
-          ritmo.
-        </p>
+        <h1 data-aos="fade-up" data-aos-delay="100">
+          ENCUENTRA TU GYMAN MÁS CERCANO,<br />SUS HORARIOS Y UBICACIÓN.
+        </h1>
       </header>
 
       <section class="section">
-        <h2>Sucursales</h2>
+        <div data-aos="fade-up" data-aos-offset="120">
+          <h2>Sucursales</h2>
+        </div>
 
         <div class="grid" id="lista">
           <progress max="100">Cargando…</progress>
         </div>
       </section>
+    </main>
   </body>
 </html>

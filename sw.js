@@ -15,7 +15,7 @@
  * conoce como número menor y se cambia cuando se realizan
  * modificaciones menores.
  */
-const VERSION = "3.00";
+const VERSION = "8.01";
 
 /**
  * Nombre de la carpeta de caché.
@@ -27,22 +27,13 @@ const CACHE = "gyman";
  * línea.
  */
 const ARCHIVOS = [
-  "agrega.html",
-  "ayuda.html",
   "favicon.ico",
   "index.html",
-  "modifica.html",
   "site.webmanifest",
   "sucursal.html",
-  "css/dark-hc.css",
-  "css/dark-mc.css",
-  "css/dark.css",
+  "css/aos.css",
   "css/estilos.css",
-  "css/light-hc.css",
-  "css/light-mc.css",
-  "css/light.css",
   "css/swiper-bundle.min.css",
-  "css/transicion_pestanas.css",
   "error/errorinterno.html",
   "error/estadoenblanco.html",
   "error/faltaestado.html",
@@ -77,24 +68,11 @@ const ARCHIVOS = [
   "img/screenshot_vertical_2.png",
   "img/screenshot_vertical_3.png",
   "img/screenshot_vertical_4.png",
-  "js/configura.js",
-  "js/nav-tab-fixed.js",
+  "js/aos.js",
   "js/registraServiceWorker.js",
   "js/swiper-bundle.min.js",
   "lib/css/material-symbols-outlined.css",
-  "lib/css/md-fab-primary.css",
-  "lib/css/md-filled-button.css",
-  "lib/css/md-filled-text-field.css",
-  "lib/css/md-list.css",
-  "lib/css/md-menu.css",
-  "lib/css/md-ripple.css",
-  "lib/css/md-segmented-button.css",
-  "lib/css/md-slider-field.css",
-  "lib/css/md-standard-icon-button.css",
-  "lib/css/md-tab.css",
-  "lib/css/md-top-app-bar.css",
   "lib/css/roboto.css",
-  "lib/fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].co...",
   "lib/fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf",
   "lib/fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].woff2",
   "lib/fonts/roboto-v32-latin-regular.woff2",
@@ -112,14 +90,6 @@ const ARCHIVOS = [
   "lib/js/resaltaSiEstasEn.js",
   "lib/js/submitForm.js",
   "lib/js/const/ES_APPLE.js",
-  "lib/js/custom/md-menu-button.js",
-  "lib/js/custom/md-options-menu.js",
-  "lib/js/custom/md-overflow-button.js",
-  "lib/js/custom/md-overflow-menu.js",
-  "lib/js/custom/md-select-menu.js",
-  "lib/js/custom/md-slider-field.js",
-  "lib/js/custom/md-top-app-bar.js",
-  "lib/js/custom/MdNavigationDrawer.js",
   "material-tokens/css/baseline.css",
   "material-tokens/css/colors.css",
   "material-tokens/css/elevation.css",
@@ -130,7 +100,6 @@ const ARCHIVOS = [
   "material-tokens/css/typography.css",
   "material-tokens/css/theme/dark.css",
   "material-tokens/css/theme/light.css",
-  "ungap/custom-elements.js",
   "/",
 ];
 
@@ -165,7 +134,14 @@ async function llenaElCache() {
   // Abre el caché de este service worker.
   const cache = await caches.open(CACHE);
   // Carga el listado de ARCHIVOS.
-  await cache.addAll(ARCHIVOS);
+  for (const archivo of ARCHIVOS) {
+    try {
+      await cache.add(archivo);
+    } catch (e) {
+      console.error("❌ No se pudo cachear:", archivo, e);
+    }
+  }
+
   console.log("Cache cargado:", CACHE);
   console.log("Versión:", VERSION);
 }
@@ -175,26 +151,6 @@ async function buscaLaRespuestaEnElCache(evt) {
   // Abre el caché.
   const cache = await caches.open(CACHE);
   const request = evt.request;
-  // Maneja las imágenes de sucursales de forma especial
-  if (request.url.includes("/img/sucursales/")) {
-    try {
-      // Intentar red primero
-      const response = await fetch(request);
-
-      // Guardar copia en cache si es válida
-      if (response && response.status === 200) {
-        cache.put(request, response.clone());
-      }
-
-      return response;
-    } catch (error) {
-      // Si no hay red, buscar en cache
-      const cached = await cache.match(request);
-      if (cached) return cached;
-
-      throw error;
-    }
-  }
   /* Busca la respuesta a la solicitud en el contenido del caché, sin
    * tomar en cuenta la parte después del símbolo "?" en la URL. */
   const response = await cache.match(request, { ignoreSearch: true });
