@@ -2,7 +2,7 @@
 <html lang="es" class="light dark">
   <head>
     <meta charset="UTF-8" />
-    <title>GYMan - PWA GYMan</title>
+    <title>GYMAN</title>
 
     <script src="js/registraServiceWorker.js"></script>
 
@@ -10,60 +10,53 @@
     <meta name="theme-color" content="#4caf50" />
     <link rel="icon" sizes="32x32" href="favicon.ico" />
     <link rel="manifest" href="site.webmanifest" />
-    <script src="ungap/custom-elements.js"></script>
 
-    <script type="module" src="js/configura.js"></script>
     <link rel="stylesheet" href="css/estilos.css" />
-    <link rel="stylesheet" href="css/transicion_pestanas.css" />
 
+    <script type="module" src="lib/js/consumeJson.js"></script>
+    <script type="module" src="lib/js/muestraObjeto.js"></script>
     <script type="module" src="lib/js/muestraError.js"></script>
-    <script type="module" src="js/bd/sucursalConsultaNoEliminados.js"></script>
-    <script type="module" src="js/renderiza.js"></script>
-    <script type="module" src="js/sincroniza.js"></script>
-    <script type="module" src="js/esperaUnPocoYSincroniza.js"></script>
+
+    <!-- AOS -->
+    <link rel="stylesheet" href="css/aos.css" />
+    <script src="js/aos.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        AOS.init({
+          once: true,
+          duration: 800,
+          easing: "ease-out-cubic",
+        });
+      });
+    </script>
   </head>
 
   <body
     onload="
-      sucursalConsultaNoEliminados()
-        .then((sucursales) => {
-          renderiza(lista, sucursales);
-          sincroniza(lista);
+      consumeJson('srv/sucursales.php')
+        .then((respuesta) => {
+          muestraObjeto(document, respuesta.body);
+          AOS.refresh();
         })
-        .catch((error) => {
-          muestraError(error);
-          esperaUnPocoYSincroniza(lista);
-        })
-    "
-  >
-    <md-top-app-bar class="center-aligned" headline="h1Headline">
-      <h1>GYMAN</h1>
-    </md-top-app-bar>
-
+        .catch(muestraError)
+    ">
     <main>
-      <h1 class="titulo">INFORMACIÓN SUCURSALES 2026</h1>
-      <h3 class="subtitulo">
-        Conoce toda la información que necesites de tus sucursales.
-      </h3>
-      <div class="md-cards" id="lista">
-        <progress max="100">Cargando…</progress>
-      </div>
+      <header class="hero">
+        <h1 data-aos="fade-up" data-aos-delay="100">
+          ENCUENTRA TU GYMAN MÁS CERCANO,<br />SUS HORARIOS Y UBICACIÓN.
+        </h1>
+      </header>
 
-      <!-- <a
-        type="button"
-        class="md-fab-primary"
-        href="agrega.html"
-        style="
-          position: fixed;
-          bottom: 1rem;
-          right: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        "
-      >
-        <span class="material-symbols-outlined">add</span>
-      </a> -->
+      <section class="section">
+        <div data-aos="fade-up" data-aos-offset="120">
+          <h2>Sucursales</h2>
+        </div>
+
+        <div class="grid" id="lista">
+          <progress max="100">Cargando…</progress>
+        </div>
+      </section>
     </main>
   </body>
 </html>

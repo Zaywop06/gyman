@@ -1,6 +1,6 @@
 {
-  "short_name": "GYMan",
-  "name": "PWA GYMan",
+  "short_name": "GYMAN",
+  "name": "PWA GYMAN",
   "id": "/index.html",
   "start_url": "/index.html",
   "display": "standalone",
